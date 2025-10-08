@@ -1,0 +1,77 @@
+[gd_scene load_steps=13 format=3 uid="uid://duql86v5pfsbg"]
+
+[ext_resource type="Script" uid="uid://bpcshc2et3wjj" path="res://Player/player.gd" id="1_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://bcgoofkkue8p5" path="res://Player/PlayerAssets/PlayerDefault1.png" id="2_00tjw"]
+[ext_resource type="Texture2D" uid="uid://55yjqthn0gtr" path="res://Player/PlayerAssets/PlayerDefault2.png" id="3_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://51xk1hnni4bf" path="res://Player/PlayerAssets/PlayerLookDown1.png" id="4_x3vf3"]
+[ext_resource type="Texture2D" uid="uid://c1s0lkvhhpidp" path="res://Player/PlayerAssets/PlayerLookDown2.png" id="5_apopc"]
+[ext_resource type="Texture2D" uid="uid://b68m8j7ocekd7" path="res://Player/PlayerAssets/PlayerLookFornt1.png" id="6_5htga"]
+[ext_resource type="Texture2D" uid="uid://cmcmcymgcxcpe" path="res://Player/PlayerAssets/PlayerLookFornt2.png" id="7_p5o4e"]
+[ext_resource type="Texture2D" uid="uid://cp4ttjoq8uakg" path="res://Player/PlayerAssets/PlayerLookUp1.png" id="8_gu6f8"]
+[ext_resource type="Texture2D" uid="uid://c5cl5mmf7445c" path="res://Player/PlayerAssets/PlayerLookUp2.png" id="9_dkpta"]
+[ext_resource type="Script" uid="uid://bqx7dt7sisf4w" path="res://Player/player_animation.gd" id="10_x3vf3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_onrkg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_00tjw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_x3vf3")
+}],
+"loop": true,
+"name": &"Default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_x3vf3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_apopc")
+}],
+"loop": true,
+"name": &"LookingDown",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_5htga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_p5o4e")
+}],
+"loop": true,
+"name": &"LookingFront",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_gu6f8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_dkpta")
+}],
+"loop": true,
+"name": &"LookingUp",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i3pqv"]
+size = Vector2(32, 32)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_4ntmi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_onrkg")
+animation = &"LookingUp"
+frame_progress = 0.43046004
+script = ExtResource("10_x3vf3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_i3pqv")
+
+[node name="JumpRay" type="RayCast2D" parent="."]
+target_position = Vector2(0, -79)
