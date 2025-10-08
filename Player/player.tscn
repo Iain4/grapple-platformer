@@ -67,11 +67,10 @@ script = ExtResource("1_4ntmi")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_onrkg")
 animation = &"LookingUp"
-frame_progress = 0.43046004
+frame_progress = 0.047045264
 script = ExtResource("10_x3vf3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="BodyCollision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_i3pqv")
 
-[node name="JumpRay" type="RayCast2D" parent="."]
-target_position = Vector2(0, -79)
+[node name="LookingBlockCollision" type="CollisionShape2D" parent="."]
