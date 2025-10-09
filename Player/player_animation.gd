@@ -1,5 +1,6 @@
 extends AnimatedSprite2D
 
+var looking = Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -7,19 +8,17 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	
-func play_looking_direc(direc) -> void:
-	if direc == "look_right":
+func _process(_delta: float) -> void:
+	if looking == Vector2.RIGHT:
 		flip_h = false
 		play("LookingFront")
-	elif direc == "look_left":
+	elif looking == Vector2.LEFT:
 		flip_h = true
 		play("LookingFront")
-	elif direc == "look_up":
+	elif looking == Vector2.UP:
 		play("LookingUp")
-	elif direc == "look_down":
+	elif looking == Vector2.DOWN:
 		play("LookingDown")
-	elif direc == "none":
+	elif looking == Vector2.ZERO:
 		play("Default")
+	

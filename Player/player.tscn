@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://duql86v5pfsbg"]
+[gd_scene load_steps=16 format=3 uid="uid://duql86v5pfsbg"]
 
 [ext_resource type="Script" uid="uid://bpcshc2et3wjj" path="res://Player/player.gd" id="1_4ntmi"]
 [ext_resource type="Texture2D" uid="uid://bcgoofkkue8p5" path="res://Player/PlayerAssets/PlayerDefault1.png" id="2_00tjw"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cp4ttjoq8uakg" path="res://Player/PlayerAssets/PlayerLookUp1.png" id="8_gu6f8"]
 [ext_resource type="Texture2D" uid="uid://c5cl5mmf7445c" path="res://Player/PlayerAssets/PlayerLookUp2.png" id="9_dkpta"]
 [ext_resource type="Script" uid="uid://bqx7dt7sisf4w" path="res://Player/player_animation.gd" id="10_x3vf3"]
+[ext_resource type="Script" uid="uid://cik2xq423wwg4" path="res://Player/look_direc_collision.gd" id="11_apopc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_onrkg"]
 animations = [{
@@ -61,16 +62,34 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i3pqv"]
 size = Vector2(32, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x3vf3"]
+size = Vector2(6, 34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_apopc"]
+size = Vector3(6, 34, 1)
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_4ntmi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_onrkg")
 animation = &"LookingUp"
-frame_progress = 0.047045264
+frame_progress = 0.713854
 script = ExtResource("10_x3vf3")
 
 [node name="BodyCollision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_i3pqv")
 
-[node name="LookingBlockCollision" type="CollisionShape2D" parent="."]
+[node name="LookArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="LookDirecCollision" type="CollisionShape2D" parent="LookArea"]
+physics_interpolation_mode = 2
+position = Vector2(16, 0)
+shape = SubResource("RectangleShape2D_x3vf3")
+script = ExtResource("11_apopc")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="LookArea/LookDirecCollision"]
+visible = false
+mesh = SubResource("BoxMesh_apopc")

@@ -2,11 +2,22 @@ extends CharacterBody2D
 
 
 const SPEED = 400.0
-const LOOK_DIRECTIONS = ["look_right", "look_left", "look_up", "look_down"]
+const LOOK_DIRECTIONS = {
+	"look_right": Vector2.RIGHT, 
+	"look_left": Vector2.LEFT, 
+	"look_up": Vector2.UP, 
+	"look_down": Vector2.DOWN,
+	}
 
-var LOOKING = "none"
-var JUMP_STAGE = 0
-var JUMPED = false
+var looking = Vector2.ZERO
+
+var _jumped = false
+var _jump_state = 0
+
+func _ready() -> void:
+	$LookArea/LookDirecCollision.p_width = $BodyCollision.shape.size[0]
+	$LookArea/LookDirecCollision.p_height = $BodyCollision.shape.size[1]
+
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -18,30 +29,32 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	LOOKING = "none"
-	for direc in LOOK_DIRECTIONS:
+	looking = Vector2.ZERO
+	for direc in LOOK_DIRECTIONS.keys():
 		if Input.is_action_pressed(direc):
-			LOOKING = direc
+			looking = LOOK_DIRECTIONS[direc]
 	# done like this so just_preesed has higher priority
-	for direc in LOOK_DIRECTIONS:
+	for direc in LOOK_DIRECTIONS.keys():
 		if Input.is_action_just_pressed(direc):
-			LOOKING = direc
-	$AnimatedSprite2D.play_looking_direc(LOOKING)
+			looking = LOOK_DIRECTIONS[direc]
+
+	$AnimatedSprite2D.looking = looking
+	$LookArea/LookDirecCollision.looking = looking
 
 
 func move_from_inputer():
-	jumper(JUMP_STAGE)
+	jumper(_jump_state)
 	# Get the input direction and handle the movement/deceleration.
 	var direction := Input.get_axis("move_left", "move_right")
 	# adjusting speed if looking in same / oposite direction
 	if ( # same
-		(direction < 0 and LOOKING == "look_left") or
-		(direction > 0 and LOOKING == "look_right")
+			(direction < 0 and looking == Vector2.LEFT) or
+			(direction > 0 and looking == Vector2.RIGHT)
 	):
 		direction *= 1.2
 	elif ( # opposite
-		(direction > 0 and LOOKING == "look_left") or
-		(direction < 0 and LOOKING == "look_right")
+			(direction > 0 and looking == Vector2.LEFT) or
+			(direction < 0 and looking == Vector2.RIGHT)
 	):
 		direction *= 0.8
 	if direction:
@@ -50,23 +63,23 @@ func move_from_inputer():
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 
-func jumper(jump_stage) -> void:
-	# JUMP_STAGE measures physics ticks since the jump left the ground
+func jumper(state) -> void:
+	# _jump_state measures physics ticks since the jump left the ground
 	# allowing for the arc and feel of the jump to be tweaked
 	# initail jumping
-	if Input.is_action_just_pressed("move_up") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity = 2000 * (Vector2.UP + velocity.normalized())
-		JUMPED = true
+		_jumped = true
 	# inflight jump
-	elif not is_on_floor() and JUMPED:
-		JUMP_STAGE += 1
-		if jump_stage == 2: # arc at the top
+	elif not is_on_floor() and _jumped:
+		_jump_state += 1
+		if state == 2: # arc at the top
 			velocity *= 0.2
-		elif jump_stage >= 5: # quick snap back down
+		elif state >= 5: # quick snap back down
 			velocity += 0.04 * get_gravity()
-		elif jump_stage >= 8:
-			JUMPED = false
+		elif state >= 8:
+			_jumped = false
 	#back on ground
 	else:
-		JUMP_STAGE = 0
-		JUMPED = false
+		_jump_state = 0
+		_jumped = false
