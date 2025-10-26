@@ -15,8 +15,8 @@ var _jumped = false
 var _jump_state = 0
 
 func _ready() -> void:
-	$LookArea/LookDirecCollision.p_width = $BodyCollision.shape.size[0]
-	$LookArea/LookDirecCollision.p_height = $BodyCollision.shape.size[1]
+	$LookArea/LookDirecCollision.p_width = $GeometryBodyCollision.shape.size[0]
+	$LookArea/LookDirecCollision.p_height = $GeometryBodyCollision.shape.size[1]
 
 
 func _physics_process(delta: float) -> void:
@@ -74,10 +74,10 @@ func jumper(state) -> void:
 	elif not is_on_floor() and _jumped:
 		_jump_state += 1
 		if state == 2: # arc at the top
-			velocity *= 0.2
-		elif state >= 5: # quick snap back down
-			velocity += 0.04 * get_gravity()
-		elif state >= 8:
+			velocity *= 0.15
+		elif state >= 18: # quick snap back down
+			velocity += 0.2 * get_gravity()
+		elif state >= 25:
 			_jumped = false
 	#back on ground
 	else:

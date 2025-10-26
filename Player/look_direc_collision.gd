@@ -1,6 +1,6 @@
 extends CollisionShape2D
 
-const DEPTH = 8
+const DEPTH = 4
 const MARGIN = 4
 
 var looking = Vector2.ZERO
